@@ -9,4 +9,67 @@
   </body>
 </html>
 
+<canvas id="gameCanvas" width="300" height="400" style="border:1px solid black;"></canvas>
+
+<script>
+let canvas = document.getElementById("gameCanvas");
+let ctx = canvas.getContext("2d");
+
+// Bird
+let birdY = 200;
+let birdVelocity = 0;
+let gravity = 0.4;
+
+// Pipe
+let pipeX = 300;
+let pipeGap = 120;
+let pipeTopHeight = Math.random() * 200;
+
+// Game loop
+function gameLoop() {
+  // Gravity
+  birdVelocity += gravity;
+  birdY += birdVelocity;
+
+  // Move pipes
+  pipeX -= 2;
+  if (pipeX < -50) {
+    pipeX = 300;
+    pipeTopHeight = Math.random() * 200;
+  }
+
+  // Collision check
+  if (
+    birdY < pipeTopHeight ||
+    birdY > pipeTopHeight + pipeGap ||
+    birdY > 380
+  ) {
+    alert("Game Over!");
+    birdY = 200;
+    birdVelocity = 0;
+    pipeX = 300;
+  }
+
+  // Draw everything
+  ctx.fillStyle = "skyblue";
+  ctx.fillRect(0, 0, 300, 400);
+
+  ctx.fillStyle = "yellow"; // bird
+  ctx.fillRect(50, birdY, 20, 20);
+
+  ctx.fillStyle = "green"; // pipes
+  ctx.fillRect(pipeX, 0, 50, pipeTopHeight);
+  ctx.fillRect(pipeX, pipeTopHeight + pipeGap, 50, 400);
+
+  requestAnimationFrame(gameLoop);
+}
+
+// Make the bird jump
+document.addEventListener("keydown", () => {
+  birdVelocity = -7;
+});
+
+gameLoop();
+</script>
+
   
