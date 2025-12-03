@@ -9,8 +9,6 @@
   </body>
 </html>
 
-<canvas id="gameCanvas" width="300" height="400" style="border:1px solid black;"></canvas>
-
 <script>
 let canvas = document.getElementById("gameCanvas");
 let ctx = canvas.getContext("2d");
@@ -18,12 +16,13 @@ let ctx = canvas.getContext("2d");
 // Bird
 let birdY = 200;
 let birdVelocity = 0;
-let gravity = 0.4;
+let gravity = 0.25; // LOWER GRAVITY
 
 // Pipe
 let pipeX = 300;
-let pipeGap = 120;
-let pipeTopHeight = Math.random() * 200;
+let pipeSpeed = 1.5; // MOVES SLOWER
+let pipeGap = 150; // BIGGER GAP
+let pipeTopHeight = Math.random() * 180;
 
 // Game loop
 function gameLoop() {
@@ -32,17 +31,17 @@ function gameLoop() {
   birdY += birdVelocity;
 
   // Move pipes
-  pipeX -= 2;
+  pipeX -= pipeSpeed;
   if (pipeX < -50) {
     pipeX = 300;
-    pipeTopHeight = Math.random() * 200;
+    pipeTopHeight = Math.random() * 180; // random pipe height
   }
 
-  // Collision check
+  // Collision check (made gentler)
   if (
-    birdY < pipeTopHeight ||
-    birdY > pipeTopHeight + pipeGap ||
-    birdY > 380
+    birdY < pipeTopHeight - 10 ||
+    birdY > pipeTopHeight + pipeGap + 10 ||
+    birdY > 380 || birdY < 0
   ) {
     alert("Game Over!");
     birdY = 200;
@@ -51,13 +50,15 @@ function gameLoop() {
   }
 
   // Draw everything
-  ctx.fillStyle = "skyblue";
+  ctx.fillStyle = "#87CEEB";
   ctx.fillRect(0, 0, 300, 400);
 
-  ctx.fillStyle = "yellow"; // bird
+  // Bird
+  ctx.fillStyle = "yellow";
   ctx.fillRect(50, birdY, 20, 20);
 
-  ctx.fillStyle = "green"; // pipes
+  // Pipes
+  ctx.fillStyle = "green";
   ctx.fillRect(pipeX, 0, 50, pipeTopHeight);
   ctx.fillRect(pipeX, pipeTopHeight + pipeGap, 50, 400);
 
@@ -66,10 +67,11 @@ function gameLoop() {
 
 // Make the bird jump
 document.addEventListener("keydown", () => {
-  birdVelocity = -7;
+  birdVelocity = -6; // nicer jump
 });
 
 gameLoop();
 </script>
+
 
   
